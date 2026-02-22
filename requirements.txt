@@ -1,0 +1,24 @@
+# Web framework
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+feedparser>=6.0.10
+playwright>=1.40.0
+
+# Scheduling
+apscheduler>=3.10.0
+
+# Semantic search
+sentence-transformers>=2.7.0
+numpy>=1.26.0
+
+# Twitter/X
+tweepy>=4.14.0
+
+# Utilities
+python-dotenv>=1.0.0
+tenacity>=8.2.0

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Search — Creative Benchmark{% endblock %}
+
+{% block content %}
+<div class="search-bar">
+  <form method="get" action="/search" style="display:contents;">
+    <input type="text" name="q" value="{{ query }}" autofocus
+           placeholder="e.g. AI-powered background removal, text-to-video, one-click captions…">
+    <button class="btn" type="submit">Search</button>
+  </form>
+</div>
+
+{% if query %}
+  <div class="stats-bar" style="margin-bottom:16px;">
+    <div class="stat">
+      <strong>{{ results | length }}</strong>
+      semantic matches for "<em>{{ query }}</em>"
+    </div>
+  </div>
+{% else %}
+  <p style="color: var(--muted); margin-bottom: 24px;">
+    Enter a feature description to find similar features across all {{ 25 }} products.<br>
+    Examples: <a href="/search?q=AI+video+generation" style="color:var(--accent);">AI video generation</a>,
+    <a href="/search?q=background+noise+removal" style="color:var(--accent);">background noise removal</a>,
+    <a href="/search?q=AI+avatar+presenter" style="color:var(--accent);">AI avatar presenter</a>
+  </p>
+{% endif %}
+
+{% if results %}
+  <div class="feature-grid">
+    {% for item in results %}
+      {% set f = item.row %}
+      <div class="card">
+        <div class="card-header">
+          <span class="product-name">{{ f['product_name'] }}</span>
+          <span style="display:flex;gap:6px;align-items:center;">
+            <span class="score-badge">{{ "%.0f"|format(item.score * 100) }}% match</span>
+            <span class="badge {% if f['category'] == 'ai' %}badge-ai{% else %}badge-nonai{% endif %}">
+              {{ 'AI' if f['category'] == 'ai' else 'Non-AI' }}
+            </span>
+          </span>
+        </div>
+        <div class="feature-title">{{ f['feature_name'] }}</div>
+        <div class="feature-desc">{{ f['description'] }}</div>
+        <div class="card-footer">
+          <span>{% if f['release_date'] %}📅 {{ f['release_date'] }}{% else %}Date unknown{% endif %}</span>
+          <span style="display:flex;gap:8px;align-items:center;">
+            <span class="source-chip">{{ f['source_type'] }}</span>
+            {% if f['source_url'] %}
+              <a href="{{ f['source_url'] }}" target="_blank" rel="noopener">↗ Source</a>
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% elif query %}
+  <div class="empty">
+    <h2>No results found</h2>
+    <p>Try a different description, or run a scrape to collect more data.</p>
+  </div>
+{% endif %}
+{% endblock %}
